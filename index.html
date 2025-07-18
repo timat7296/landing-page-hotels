@@ -157,15 +157,15 @@
         <!-- inserir linha para exlusive Services -->
         <!-- inserir linha para ghuest reviews -->
         <!-- inserir linha para para calendario e mapa -->
-         <div class="row text-light">
+        <div class="row text-light">
             <div class="col-12">
-<h2>book now</h2>
+                <h2>book now</h2>
                 <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quisquam tempore dolorum voluptatum maiores
                     sit ullam officiis voluptatem nulla deserunt sint distinctio nisi in recusandae harum, molestiae est
                     enim accusantium vitae.</p>
             </div>
 
-            <div class="col-md">´
+            <div class="col-md">
                 <p>checkin</p>
                 <button class="btn btn-light rounded-pill ps-5 pe-5">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -199,12 +199,12 @@
                     width="100%" height="300" class="big-round mapa" style="border: 0;" loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
-         </div>
-     
+        </div>
+
 
         <!-- rodape para formulatrio -->
 
-        <footer class="row text-light bg-verde big-round">
+        <footer class="row text-light bg-verde big-round p-5">
 
 
             <div class="col-md">
@@ -222,7 +222,68 @@
             <div class="col-md">
                 <!-- formulario de cadastro -->
 
-                <form action="processador.php" method="post">
+                <form action="https://formspree.io/f/xqalaylk" class="mt-5 mb 5" method="post">
+
+                    <div class="mb-3">
+                        <label for="" class="form-label">Nome</label>
+                        <input type="text" class="form-control" name="nome" id="nome" placeholder="Digite seu nome" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="" class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelpId"
+                            placeholder="abc@mail.com" />
+                        <small id="emailHelpId" class="form-text text-muted">Help text</small>
+                    </div>
+                    <p>Gênero:</p>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="genero" id="genero1" value="Feminino" />
+                        <label class="form-check-label" for="">Feminino</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="genero" id="genero2" value="Masculino" />
+                        <label class="form-check-label" for="">Masculino</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="genero" id="genero3" value="Outros" />
+                        <label class="form-check-label" for="">Outros</label>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label for="estados" class="form-label">Estados</label>
+                        <select onchange="listarCidades()" class="form-select" name="estados" id="estados">
+
+
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="cidades" class="form-label">Cidades</label>
+                        <select class="form-select form-select-lg" name="cidades" id="cidades">
+
+                        </select>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label for="idade" class="form-label">Idade</label>
+                        <input
+                            type="number"
+                            class="form-control"
+                            name="idade"
+                            min="0"
+                            max="120"
+                        
+                        />
+                        
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="mensagem" class="form-label">Mensagem</label>
+                        <textarea class="form-control" name="mensagem" id="mensagem" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-light rounded-pill">Enviar</button>
 
                 </form>
 
@@ -230,8 +291,12 @@
 
 
 
+    </div>
 
-        </footer>
+
+
+
+    </footer>
 
 
 
@@ -246,6 +311,68 @@
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
     <!--    java script interno  -->
+
+    <script>
+        //função de execução automatica
+        (() => {
+            const url = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados';
+            // constante representa select com id estados 
+            const estados = document.getElementById('estados');
+            //constante para armazenar os options do select
+            let options = '<option>selecione</option>';
+
+            //estrutura para capturar dados da API
+            fetch(url)
+                .then(obj => obj.json())
+                .then(json => {
+                    // Ordena os estados por nome
+                    json.sort((a, b) => a.nome.localeCompare(b.nome));
+                    //Laço para percorrer todos os valores do objeto
+                    for (let i = 0; i < json.length; i++) {
+                        //escreve dentro do select id "estados" os options 
+                        options += `<option value="${json[i].id}">
+                                ${json[i].nome}
+                                </option>`;
+                    }
+                    // preenche o select com o conteúdo da variavel options
+                    estados.innerHTML = options;
+                })
+                .catch(erro => alert(erro));
+        })();
+
+        //função para listar as cidades
+        const listarCidades = () =>{
+            //constante para capturar o select estados
+            const estados = document.getElementById('estados');
+            //constante para capturar o select cidades
+            const cidades = document.getElementById('cidades');
+            //constante para armazenar os options do select cidades
+            let options = '<option>selecione</option>';
+            //captura o valor do select estados
+            const idEstado = estados.value;
+
+            //verifica se o idEstado é diferente de vazio
+            if (idEstado != '') {
+                //URL da API para buscar as cidades
+                const url = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${idEstado}/municipios`;
+
+                fetch(url).then(obj => obj.json()).then(json => {
+                    for (let i = 0; i < json.length; i++) {
+                        options += `<option value="${json[i].nome}">
+                            ${json[i].nome}
+                            </option>`;
+                    }
+                    cidades.innerHTML = options;
+                }).catch(erro => alert(erro));
+            } else {
+                cidades.innerHTML = options;
+            }
+
+        }
+
+
+        
+    </script>
 
 </body>
 
