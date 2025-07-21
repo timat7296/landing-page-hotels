@@ -258,7 +258,7 @@
                         </select>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-3 d-none" id="divCidades" >
                         <label for="cidades" class="form-label">Cidades</label>
                         <select class="form-select form-select-lg" name="cidades" id="cidades">
 
@@ -268,15 +268,8 @@
 
                     <div class="mb-3">
                         <label for="idade" class="form-label">Idade</label>
-                        <input
-                            type="number"
-                            class="form-control"
-                            name="idade"
-                            min="0"
-                            max="120"
-                        
-                        />
-                        
+                        <input type="number" class="form-control" name="idade" min="0" max="120" />
+
                     </div>
 
                     <div class="mb-3">
@@ -341,7 +334,7 @@
         })();
 
         //função para listar as cidades
-        const listarCidades = () =>{
+        const listarCidades = () => {
             //constante para capturar o select estados
             const estados = document.getElementById('estados');
             //constante para capturar o select cidades
@@ -364,17 +357,18 @@
                     }
                     cidades.innerHTML = options;
                 }).catch(erro => alert(erro));
-            } else {
-                cidades.innerHTML = options;
-            }
 
+                //mostre a div com as cidades se o estado for selecionado
+
+                const elementoCidades = document.getElementById('divCidades');
+
+                elementoCidades.classList.remove('d-none');
+            }
         }
 
 
-        
     </script>
 
 </body>
-
 
 </html>
